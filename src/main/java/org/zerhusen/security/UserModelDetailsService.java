@@ -31,6 +31,11 @@ public class UserModelDetailsService implements UserDetailsService {
       this.userRepository = userRepository;
    }
 
+   /**
+    * 这里就是从数据库查询一个 用户 返回一个 UserDetails 具体看README内博客内容
+    * @param login
+    * @return
+    */
    @Override
    @Transactional
    public UserDetails loadUserByUsername(final String login) {

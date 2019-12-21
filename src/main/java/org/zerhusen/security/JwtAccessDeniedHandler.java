@@ -8,6 +8,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
+/**
+ * 权限不足异常
+ */
 @Component
 public class JwtAccessDeniedHandler implements AccessDeniedHandler {
 

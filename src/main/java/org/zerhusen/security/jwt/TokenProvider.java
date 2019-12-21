@@ -34,6 +34,12 @@ public class TokenProvider implements InitializingBean {
    private Key key;
 
 
+   /**
+    * @Value 可以从 application 配置中获取到配置信息 注入到参数内
+    * @param base64Secret
+    * @param tokenValidityInSeconds
+    * @param tokenValidityInSecondsForRememberMe
+    */
    public TokenProvider(
       @Value("${jwt.base64-secret}") String base64Secret,
       @Value("${jwt.token-validity-in-seconds}") long tokenValidityInSeconds,
@@ -50,18 +56,21 @@ public class TokenProvider implements InitializingBean {
    }
 
    public String createToken(Authentication authentication, boolean rememberMe) {
+      // 获取到权限集合 拼接转换为 ,
       String authorities = authentication.getAuthorities().stream()
          .map(GrantedAuthority::getAuthority)
          .collect(Collectors.joining(","));
 
       long now = (new Date()).getTime();
       Date validity;
+      // 记住我 true false 只是token 时长不一样 自己配置就好
       if (rememberMe) {
          validity = new Date(now + this.tokenValidityInMillisecondsForRememberMe);
       } else {
          validity = new Date(now + this.tokenValidityInMilliseconds);
       }
 
+      // build jwt
       return Jwts.builder()
          .setSubject(authentication.getName())
          .claim(AUTHORITIES_KEY, authorities)
@@ -71,23 +80,27 @@ public class TokenProvider implements InitializingBean {
    }
 
    public Authentication getAuthentication(String token) {
+      // 解析token 获取到主体内容
       Claims claims = Jwts.parser()
          .setSigningKey(key)
          .parseClaimsJws(token)
          .getBody();
 
+      // 将获取到的 权限字符串解密 拼接 map 转换为 SimpleGrantedAuthority 转为一个 List
       Collection<? extends GrantedAuthority> authorities =
          Arrays.stream(claims.get(AUTHORITIES_KEY).toString().split(","))
             .map(SimpleGrantedAuthority::new)
             .collect(Collectors.toList());
 
+      // 构建一个 UserDetails  org.zerhusen.security.UserModelDetailsService 这里返回的 User 对象和  UserModelDetailsService  一样
       User principal = new User(claims.getSubject(), "", authorities);
-
+      // 返回一个 UsernamePasswordAuthenticationToken
       return new UsernamePasswordAuthenticationToken(principal, token, authorities);
    }
 
    public boolean validateToken(String authToken) {
       try {
+         // 解密token 如果不抛出异常 就是成功
          Jwts.parser().setSigningKey(key).parseClaimsJws(authToken);
          return true;
       } catch (io.jsonwebtoken.security.SecurityException | MalformedJwtException e) {

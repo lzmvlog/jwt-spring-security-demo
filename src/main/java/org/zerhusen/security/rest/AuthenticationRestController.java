@@ -34,18 +34,27 @@ public class AuthenticationRestController {
       this.authenticationManagerBuilder = authenticationManagerBuilder;
    }
 
+   /**
+    * 这里是之前忽略的认证请求URL
+    * @param loginDto
+    * @return
+    */
    @PostMapping("/authenticate")
    public ResponseEntity<JWTToken> authorize(@Valid @RequestBody LoginDto loginDto) {
 
+      // 封装一个 UsernamePasswordAuthenticationToken 是不是很像拦截器那里做了一次的事情, 区别在于传递了密码
       UsernamePasswordAuthenticationToken authenticationToken =
          new UsernamePasswordAuthenticationToken(loginDto.getUsername(), loginDto.getPassword());
 
+      // 这里是自己认证了 这个 authenticationToken 最后会传递到 org.zerhusen.security.UserModelDetailsService 拦截器去验证登录
       Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
+      // 设置 认证完成后的用户信息
       SecurityContextHolder.getContext().setAuthentication(authentication);
-
+      // 看看是否勾选了 记住我
       boolean rememberMe = (loginDto.isRememberMe() == null) ? false : loginDto.isRememberMe();
+      // 如果勾选了 记住我, 让token 的生效期会长一些, 这里是 token 构建时候的配置 , 可以进去看 jwt util 的内容
       String jwt = tokenProvider.createToken(authentication, rememberMe);
-
+      // 这一步没啥必要 最后body 中也返回了
       HttpHeaders httpHeaders = new HttpHeaders();
       httpHeaders.add(JWTFilter.AUTHORIZATION_HEADER, "Bearer " + jwt);
 

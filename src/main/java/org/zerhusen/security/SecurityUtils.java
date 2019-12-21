@@ -8,6 +8,10 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Optional;
 
+/**
+ * security util
+ * SecurityContextHolder 的一个封装
+ */
 public class SecurityUtils {
 
    private static final Logger LOG = LoggerFactory.getLogger(SecurityUtils.class);

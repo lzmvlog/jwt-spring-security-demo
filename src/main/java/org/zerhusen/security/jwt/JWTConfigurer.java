@@ -13,9 +13,11 @@ public class JWTConfigurer extends SecurityConfigurerAdapter<DefaultSecurityFilt
         this.tokenProvider = tokenProvider;
     }
 
-    @Override
-    public void configure(HttpSecurity http) {
-        JWTFilter customFilter = new JWTFilter(tokenProvider);
-        http.addFilterBefore(customFilter, UsernamePasswordAuthenticationFilter.class);
-    }
+   @Override
+   public void configure(HttpSecurity http) {
+      // 实例化 JwtFilter 拦截器, 将Token util bean 传递过来
+      JWTFilter customFilter = new JWTFilter(tokenProvider);
+      // 将这个 jwt filter 配置在 UsernamePasswordAuthenticationFilter.class 之前
+      http.addFilterBefore(customFilter, UsernamePasswordAuthenticationFilter.class);
+   }
 }
