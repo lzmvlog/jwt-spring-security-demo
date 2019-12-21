@@ -1,5 +1,10 @@
 # JWT Spring Security Demo
 
+
+中文版 [中文版](/zhengchalei/jwt-spring-security-demo/blob/master//README-zh_CN.md)
+
+![Screenshot from running application](etc/screenshot-jwt-spring-security-demo.png?raw=true "Screenshot JWT Spring Security Demo")
+
 ![Screenshot from running application](etc/screenshot-jwt-spring-security-demo.png?raw=true "Screenshot JWT Spring Security Demo")
 
 ## About
