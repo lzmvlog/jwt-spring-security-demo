@@ -1,3 +1,11 @@
+# 阅读前准备 
+翻译不易, 麻烦点击一下 Start , Fork , 项目下载下载 , 等待依赖下载完毕, 直接启动,
+本项目未对源项目做更新, 只是添加了注释内容 原地址: `https://github.com/szerhusenBC/jwt-spring-security-demo`
+谢谢各位大老爷们
+
+注: 启动报错, H2 报错不影响使用: org.hibernate.tool.schema.spi.CommandAcceptanceException: Error executing DDL "# noinspection SqlNoDataSourceInspectionForFile" via JDBC Statement
+有兴趣自己可以解决,是 JPA DDL 语句问题
+
 启动程序后打开URL: `http://localhost:8080/h2-console`
 ![UTOOLS1576923447990.png](https://i.loli.net/2019/12/21/pNEOwjP9dTrYDAz.png)
 
